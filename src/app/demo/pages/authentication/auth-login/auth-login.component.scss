@@ -1,0 +1,131 @@
+@import '../../../../../scss/settings/color-variables.scss';
+
+.auth-main {
+  position: relative;
+
+  .auth-wrapper {
+    height: 100%;
+    width: 100%;
+    min-height: 100vh;
+
+    .saprator {
+      position: relative;
+      display: flex;
+      align-self: center;
+      justify-content: center;
+
+      &:after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background: var(--bs-border-color);
+        z-index: 1;
+      }
+
+      span {
+        font-size: 0.875rem;
+        padding: 8px 24px;
+        background: $white;
+        z-index: 5;
+        text-transform: capitalize;
+        color: $gray-800;
+        font-weight: 500;
+      }
+    }
+
+    &.v3 {
+      display: flex;
+      align-items: center;
+
+      .auth-form {
+        flex-direction: column;
+        background: url('../../../../../assets/images/authentication/img-auth-bg.svg');
+        min-height: 100vh;
+        padding: 24px;
+        background-repeat: no-repeat;
+        background-size: auto 82%;
+        background-position: left bottom;
+        position: relative;
+        justify-content: space-between;
+        > * {
+          position: relative;
+          z-index: 5;
+        }
+        &:after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba($white, 0.2);
+          backdrop-filter: blur(16px);
+        }
+      }
+    }
+    .auth-form {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-grow: 1;
+
+      .card {
+        width: 100%;
+        max-width: 495px;
+        box-shadow: none;
+      }
+
+      img + span {
+        padding-left: 15px;
+      }
+
+      h5 {
+        span {
+          text-decoration: underline;
+        }
+      }
+    }
+    .auth-footer,
+    .auth-header {
+      display: flex;
+      justify-content: center; // Center the logo horizontally
+      align-items: center; // Center the logo vertically
+      padding: 1rem 0; // Add some padding
+      background-color: #ffffff; // Optional: Add a background color
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // Optional: Add a subtle shadow
+    
+      a {
+        display: inline-block; // Ensure the anchor tag wraps the image properly
+        text-align: center; // Center the image inside the anchor tag
+    
+        img {
+          max-width: 100%; // Ensure the image is responsive
+          height: auto; // Maintain aspect ratio
+          max-height: 80px; // Set a maximum height for the logo
+          width: auto; // Allow the width to adjust based on height
+          transition: transform 0.3s ease; // Optional: Add a hover effect
+    
+          &:hover {
+            transform: scale(1.05); // Optional: Slightly enlarge the logo on hover
+          }
+        }
+      }
+    }
+  }
+}
+
+form i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0px -12px 0px 0px;
+  cursor: pointer;
+  padding: 12px;
+  font-size: 18px;
+  position: absolute;
+  top: 203px;
+  right: 45px;
+}

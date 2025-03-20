@@ -1,0 +1,94 @@
+<div class="project-page">
+  <!-- Header -->
+  <div class="header">
+    <button class="btn btn-primary" (click)="openTaskModal()">
+      <i class="fas fa-plus"></i> Add Task
+      
+    </button>
+    <button class="btn btn-primary" (click)="openTaskModal()">
+      <i class="fas fa-plus"></i> Add project
+      
+    </button>
+  </div>
+
+  <!-- Project Overview -->
+  <div class="project-overview">
+    <div class="overview-card">
+      <h3>Project Overview</h3>
+      <p>
+        This project involves redesigning the company website to improve user experience and modernize the design.
+      </p>
+      <div class="stats">
+        <div class="stat">
+          <span class="stat-value">12</span>
+          <span class="stat-label">Tasks</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">8</span>
+          <span class="stat-label">Completed</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">4</span>
+          <span class="stat-label">In Progress</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Task List -->
+  <div class="task-list">
+    <h2>Tasks</h2>
+    <div class="task-card" *ngFor="let task of tasks">
+      <div class="task-header">
+        <h3>{{ task.description }}</h3>
+        <span class="task-status" [class.completed]="task.completed">
+          {{ task.completed ? 'Completed' : 'In Progress' }}
+        </span>
+      </div>
+      <div class="task-body">
+        <p><strong>Deadline:</strong> {{ task.deadline }}</p>
+        <p><strong>Assigned To:</strong> {{ task.assignedTo }}</p>
+      </div>
+      <div class="task-actions">
+        <button class="btn btn-edit" (click)="editTask(task)">
+          <i class="fas fa-edit"></i> Edit
+        </button>
+        <button class="btn btn-delete" (click)="deleteTask(task)">
+          <i class="fas fa-trash"></i> Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Task Modal -->
+  <div class="modal" *ngIf="showTaskModal">
+    <div class="modal-content">
+      <span class="close" (click)="closeTaskModal()">&times;</span>
+      <h3>Add New Task</h3>
+      <form>
+        <div class="form-group">
+          <label>Task Description</label>
+          <input type="text" placeholder="Enter task description" />
+        </div>
+        <div class="form-group">
+          <label>Deadline</label>
+          <input type="date" />
+        </div>
+        <div class="form-group">
+          <label>Assigned To</label>
+          <select>
+            <option value="John Doe">John Doe</option>
+            <option value="Jane Smith">Jane Smith</option>
+            <option value="Alice Johnson">Alice Johnson</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" (click)="closeTaskModal()">
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-primary">Add Task</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

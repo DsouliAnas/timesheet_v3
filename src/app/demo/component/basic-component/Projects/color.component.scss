@@ -1,0 +1,255 @@
+// Variables
+$primary-color: #3498db;
+$secondary-color: #2ecc71;
+$danger-color: #e74c3c;
+$background-color: #f4f4f4;
+$text-color: #333;
+
+// General Styles
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: $background-color;
+  color: $text-color;
+  margin: 0;
+  padding: 0;
+}
+
+.project-page {
+  padding: 20px;
+}
+
+// Header
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+
+  h1 {
+    font-size: 24px;
+    color: $primary-color;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+
+    &.btn-primary {
+      background-color: $primary-color;
+      color: white;
+
+      &:hover {
+        background-color: darken($primary-color, 10%);
+      }
+    }
+  }
+}
+
+// Project Overview
+.project-overview {
+  margin-bottom: 30px;
+
+  .overview-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    h3 {
+      margin-top: 0;
+      color: $primary-color;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+
+      .stat {
+        text-align: center;
+
+        .stat-value {
+          font-size: 24px;
+          font-weight: bold;
+          color: $primary-color;
+        }
+
+        .stat-label {
+          font-size: 14px;
+          color: #777;
+        }
+      }
+    }
+  }
+}
+
+// Task List
+.task-list {
+  h2 {
+    font-size: 20px;
+    color: $primary-color;
+    margin-bottom: 20px;
+  }
+
+  .task-card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+
+      h3 {
+        margin: 0;
+        font-size: 18px;
+      }
+
+      .task-status {
+        font-size: 14px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        background-color: #f1c40f;
+        color: white;
+
+        &.completed {
+          background-color: $secondary-color;
+        }
+      }
+    }
+
+    .task-body {
+      p {
+        margin: 5px 0;
+        font-size: 14px;
+      }
+    }
+
+    .task-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+
+      .btn {
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+
+        &.btn-edit {
+          background-color: $primary-color;
+          color: white;
+
+          &:hover {
+            background-color: darken($primary-color, 10%);
+          }
+        }
+
+        &.btn-delete {
+          background-color: $danger-color;
+          color: white;
+
+          &:hover {
+            background-color: darken($danger-color, 10%);
+          }
+        }
+      }
+    }
+  }
+}
+
+// Modal
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+
+    .close {
+      float: right;
+      font-size: 24px;
+      cursor: pointer;
+      color: #777;
+
+      &:hover {
+        color: $text-color;
+      }
+    }
+
+    h3 {
+      margin-top: 0;
+      color: $primary-color;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 14px;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+
+      .btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+
+        &.btn-secondary {
+          background-color: #ddd;
+          color: $text-color;
+
+          &:hover {
+            background-color: darken(#ddd, 10%);
+          }
+        }
+
+        &.btn-primary {
+          background-color: $primary-color;
+          color: white;
+
+          &:hover {
+            background-color: darken($primary-color, 10%);
+          }
+        }
+      }
+    }
+  }
+}

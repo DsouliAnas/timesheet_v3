@@ -1,0 +1,93 @@
+// Variables
+$primary-color: #3498db;
+$success-color: #2ecc71;
+$danger-color: #e74c3c;
+$background-color: #f4f4f4;
+$text-color: #333;
+
+// General Styles
+.timesheet-approval-page {
+  padding: 20px;
+}
+
+// Header
+.header {
+  margin-bottom: 20px;
+
+  h1 {
+    font-size: 24px;
+    color: $primary-color;
+  }
+}
+
+// Timesheet Table
+.timesheet-table {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th,
+    td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: $primary-color;
+      color: white;
+    }
+
+    .status {
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 14px;
+
+      &.approved {
+        background-color: $success-color;
+        color: white;
+      }
+
+      &.rejected {
+        background-color: $danger-color;
+        color: white;
+      }
+
+      &.pending {
+        background-color: #f1c40f;
+        color: white;
+      }
+    }
+
+    .btn {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+
+      &.btn-approve {
+        background-color: $success-color;
+        color: white;
+
+        &:hover {
+          background-color: darken($success-color, 10%);
+        }
+      }
+
+      &.btn-reject {
+        background-color: $danger-color;
+        color: white;
+
+        &:hover {
+          background-color: darken($danger-color, 10%);
+        }
+      }
+    }
+  }
+}

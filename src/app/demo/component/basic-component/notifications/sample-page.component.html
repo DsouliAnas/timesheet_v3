@@ -1,0 +1,25 @@
+<div class="notification-page">
+  <!-- Header -->
+  <div class="header">
+    <h1>Notifications</h1>
+  </div>
+
+  <!-- Notification List -->
+  <div class="notification-list">
+    <div class="notification-card" *ngFor="let notification of notifications">
+      <div class="notification-content">
+        <h3>{{ notification.title }}</h3>
+        <p>{{ notification.message }}</p>
+        <span class="timestamp">{{ notification.timestamp }}</span>
+      </div>
+      <div class="notification-actions">
+        <button class="btn btn-mark-read" (click)="markAsRead(notification)" *ngIf="!notification.read">
+          Mark as Read
+        </button>
+        <button class="btn btn-delete" (click)="deleteNotification(notification)">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

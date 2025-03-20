@@ -1,0 +1,84 @@
+// Variables
+$primary-color: #3498db;
+$danger-color: #e74c3c;
+$background-color: #f4f4f4;
+$text-color: #333;
+
+// General Styles
+.notification-page {
+  padding: 20px;
+}
+
+// Header
+.header {
+  margin-bottom: 20px;
+
+  h1 {
+    font-size: 24px;
+    color: $primary-color;
+  }
+}
+
+// Notification List
+.notification-list {
+  .notification-card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .notification-content {
+      h3 {
+        margin: 0;
+        font-size: 18px;
+        color: $text-color;
+      }
+
+      p {
+        margin: 5px 0;
+        font-size: 14px;
+        color: #777;
+      }
+
+      .timestamp {
+        font-size: 12px;
+        color: #999;
+      }
+    }
+
+    .notification-actions {
+      display: flex;
+      gap: 10px;
+
+      .btn {
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+
+        &.btn-mark-read {
+          background-color: $primary-color;
+          color: white;
+
+          &:hover {
+            background-color: darken($primary-color, 10%);
+          }
+        }
+
+        &.btn-delete {
+          background-color: $danger-color;
+          color: white;
+
+          &:hover {
+            background-color: darken($danger-color, 10%);
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,71 @@
+<div class="user-management-page">
+    <!-- Header -->
+    <div class="header">
+      <button class="btn btn-primary" (click)="openUserModal()">
+        <i class="fas fa-plus"></i> Add User
+      </button>
+    </div>
+  
+    <!-- User Table -->
+    <div class="user-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users">
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.role }}</td>
+            <td>
+              <button class="btn btn-edit" (click)="editUser(user)">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="btn btn-delete" (click)="deleteUser(user)">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Add/Edit User Modal -->
+    <div class="modal" *ngIf="showUserModal">
+      <div class="modal-content">
+        <span class="close" (click)="closeUserModal()">&times;</span>
+        <h3>{{ userToEdit ? 'Edit User' : 'Add User' }}</h3>
+        <form (submit)="submitUserForm()">
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" [(ngModel)]="newUser.name" name="name" required />
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" [(ngModel)]="newUser.email" name="email" required />
+          </div>
+          <div class="form-group">
+            <label>Role</label>
+            <select [(ngModel)]="newUser.role" name="role" required>
+              <option value="Admin">Admin</option>
+              <option value="Manager">Manager</option>
+              <option value="Employee">Employee</option>
+            </select>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" (click)="closeUserModal()">
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">
+              {{ userToEdit ? 'Save' : 'Add User' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
