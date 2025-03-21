@@ -5,11 +5,12 @@
       <h2 *ngIf="!projectDetails">Tâches du projet</h2>
       <div class="header-actions">
         <button class="btn btn-primary" (click)="openTaskModal()">
-          <i class="fas fa-plus"></i> Ajouter une tâche
-        </button>
-        <button class="btn btn-secondary" routerLink="/admin/project">
-          <i class="fas fa-arrow-left"></i> Retour aux projets
-        </button>
+            <i class="fas fa-plus"></i> Add task
+          </button>          
+        <button class="btn btn-secondary" routerLink="/projects">
+            <i class="fas fa-arrow-left"></i> Back to projects
+          </button>
+          
       </div>
     </div>
   
@@ -50,56 +51,31 @@
     </div>
     
     <!-- Task Creation Modal -->
-    <div class="modal" *ngIf="showTaskModal">
-      <div class="modal-content">
-        <span class="close" (click)="closeTaskModal()">&times;</span>
-        <h3>Ajouter une nouvelle tâche</h3>
-        
-        <form (submit)="submitTask()">
-          <div class="form-group">
-            <label>Description de la tâche</label>
+    <div *ngIf="showTaskModal" class="task-modal">
+        <div class="modal-content">
+          <form (ngSubmit)="submitTask()">
+            <label for="description">Description</label>
             <input type="text" [(ngModel)]="newTask.description" name="description" required>
-          </div>
-          
-          <div class="form-row">
-            <div class="form-group">
-              <label>Date de début</label>
-              <input type="date" [(ngModel)]="newTask.debutdateAffaire" name="debutdateAffaire" required>
-            </div>
-            <div class="form-group">
-              <label>Date de fin</label>
-              <input type="date" [(ngModel)]="newTask.FindateAffaire" name="FindateAffaire" required>
-            </div>
-          </div>
-          
-          <div class="form-group">
-            <label>Date limite (Deadline)</label>
+      
+            <label for="debutdateAffaire">Début de l'affaire</label>
+            <input type="date" [(ngModel)]="newTask.debutdateAffaire" name="debutdateAffaire" required>
+      
+            <label for="FindateAffaire">Fin de l'affaire</label>
+            <input type="date" [(ngModel)]="newTask.FindateAffaire" name="FindateAffaire" required>
+      
+            <label for="deadline">Date limite</label>
             <input type="date" [(ngModel)]="newTask.deadline" name="deadline" required>
-          </div>
-          
-          <div class="form-group">
-            <label>Statut</label>
-            <select [(ngModel)]="newTask.etat" name="etat">
-              <option [ngValue]="false">En cours</option>
-              <option [ngValue]="true">Terminée</option>
-            </select>
-          </div>
-          
-          <div class="form-group">
-            <label>Assigner à un employé</label>
-            <select [(ngModel)]="selectedEmployeeId" name="employeeId" required>
-              <option [ngValue]="null">Sélectionner un employé</option>
-              <option *ngFor="let employee of employees" [ngValue]="employee.id">
-                {{ employee.nom }} {{ employee.prenom }} ({{ employee.email }})
+      
+            <label for="employee">Assign to Employee</label>
+            <select [(ngModel)]="selectedEmployeeId" name="employee" required>
+              <option *ngFor="let employee of employees" [value]="employee.id">
+                {{ employee.nom }} {{ employee.prenom }}
               </option>
             </select>
-          </div>
-          
-          <div class="form-actions">
-            <button type="button" class="btn btn-secondary" (click)="closeTaskModal()">Annuler</button>
-            <button type="submit" class="btn btn-primary">Créer la tâche</button>
-          </div>
-        </form>
+      
+            <button type="submit" class="btn btn-primary">Add Task</button>
+            <button type="button" class="btn btn-secondary" (click)="closeTaskModal()">Cancel</button>
+          </form>
+        </div>
       </div>
     </div>
-  </div>

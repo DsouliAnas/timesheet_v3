@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
+import { AdminService } from '../../../../AdminService/admin.service';
+
 interface User {
   id: number;
   name: string;
@@ -10,31 +13,33 @@ interface User {
 
 @Component({
   selector: 'app-user-managment',
-  imports: [FormsModule,CommonModule],
   templateUrl: './user-managment.component.html',
-  styleUrl: './user-managment.component.scss'
+  imports: [FormsModule, CommonModule],
+  styleUrls: ['./user-managment.component.scss'],
 })
-export class UserManagmentComponent {
-
-  users: User[] = [
-    { id: 1, name: 'John Doe', email: 'john.doe@example.com', role: 'Admin' },
-    { id: 2, name: 'Jane Smith', email: 'jane.smith@example.com', role: 'Manager' },
-    { id: 3, name: 'Alice Johnson', email: 'alice.johnson@example.com', role: 'Employee' },
-  ];
-
-  // Modal state
+export class UserManagmentComponent implements OnInit {
+  users: User[] = [];
   showUserModal: boolean = false;
-
-  // User being edited (if any)
   userToEdit: User | null = null;
+  newUser: User = { id: 0, name: '', email: '', role: 'Employee' };
 
-  // New user form data
-  newUser: User = {
-    id: 0,
-    name: '',
-    email: '',
-    role: 'Employee',
-  };
+  constructor(private adminService: AdminService) {}
+
+  ngOnInit(): void {
+    this.loadUsers();  // Load users from the backend
+  }
+
+  // Load users from the backend
+  loadUsers(): void {
+    this.adminService.getEmployees().subscribe(
+      (data) => {
+        this.users = data;  // Assuming the data returned is in the correct format
+      },
+      (error: HttpErrorResponse) => {
+        console.error('Error fetching users', error);
+      }
+    );
+  }
 
   // Open the user modal
   openUserModal(): void {
@@ -44,59 +49,73 @@ export class UserManagmentComponent {
   // Close the user modal
   closeUserModal(): void {
     this.showUserModal = false;
-    this.userToEdit = null; // Reset userToEdit when closing the modal
-    this.resetNewUserForm(); // Reset the form
+    this.userToEdit = null;
+    this.resetNewUserForm();
   }
 
   // Reset the new user form
   resetNewUserForm(): void {
-    this.newUser = {
-      id: 0,
-      name: '',
-      email: '',
-      role: 'Employee',
-    };
+    this.newUser = { id: 0, name: '', email: '', role: 'Employee' };
   }
 
-  // Add a new user
+  // Add a new user (send to backend)
   addUser(): void {
     if (this.newUser.name && this.newUser.email && this.newUser.role) {
-      this.newUser.id = this.users.length + 1; // Generate a new ID
-      this.users.push({ ...this.newUser }); // Add the new user to the list
-      this.closeUserModal(); // Close the modal
+      this.adminService.createEmployee(this.newUser).subscribe(
+        (data) => {
+          this.users.push(data);  // Add the new user to the list
+          this.closeUserModal();
+        },
+        (error: HttpErrorResponse) => {
+          console.error('Error adding user', error);
+        }
+      );
     }
   }
 
   // Edit a user
   editUser(user: User): void {
-    this.userToEdit = { ...user }; // Set the user to edit
-    this.newUser = { ...user }; // Populate the form with the user data
-    this.showUserModal = true; // Open the modal
+    this.userToEdit = { ...user };
+    this.newUser = { ...user };  // Populate the form with the user's data
+    this.showUserModal = true;
   }
 
   // Save the edited user
   saveEditedUser(): void {
     if (this.userToEdit) {
-      const index = this.users.findIndex((u) => u.id === this.userToEdit?.id);
-      if (index !== -1) {
-        this.users[index] = { ...this.newUser }; // Update the user in the list
-      }
-      this.closeUserModal(); // Close the modal
+      this.adminService.updateEmployee(this.newUser).subscribe(
+        (updatedUser) => {
+          const index = this.users.findIndex((u) => u.id === this.userToEdit?.id);
+          if (index !== -1) {
+            this.users[index] = updatedUser;  // Update the user in the list
+          }
+          this.closeUserModal();
+        },
+        (error: HttpErrorResponse) => {
+          console.error('Error updating user', error);
+        }
+      );
     }
   }
 
-  // Delete a user
+  // Delete a user (send to backend)
   deleteUser(user: User): void {
-    this.users = this.users.filter((u) => u.id !== user.id);
+    this.adminService.deleteEmployee(user.id).subscribe(
+      () => {
+        this.users = this.users.filter((u) => u.id !== user.id);
+      },
+      (error: HttpErrorResponse) => {
+        console.error('Error deleting user', error);
+      }
+    );
   }
 
   // Submit the form (add or edit user)
   submitUserForm(): void {
     if (this.userToEdit) {
-      this.saveEditedUser(); // Save the edited user
+      this.saveEditedUser();  // Save the edited user
     } else {
-      this.addUser(); // Add a new user
+      this.addUser();  // Add a new user
     }
   }
-
 }

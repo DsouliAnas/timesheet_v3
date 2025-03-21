@@ -124,9 +124,6 @@
     }
   }
 
-  .modal {
-    /* Styles de modal existants */
-  }
 
   .btn {
     &-primary {
@@ -162,4 +159,34 @@
     font-size: 2rem;
     color: #1976d2;
   }
+
+  .modal {
+    display: block; /* Show the modal */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    z-index: 1000; /* Ensure it stays on top */
+  }
+  
+  .modal-content {
+    position: relative;
+    margin: 15% auto;
+    padding: 20px;
+    background-color: white;
+    width: 50%;
+    max-width: 600px;
+    border-radius: 8px;
+  }
+  
+  .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 30px;
+    cursor: pointer;
+  }
+  
 }

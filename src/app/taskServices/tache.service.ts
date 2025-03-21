@@ -49,6 +49,6 @@ export class TacheService {
 
   // Fetch employees
   getEmployees(): Observable<Employee[]> {
-    return this.http.get<Employee[]>('http://localhost:8080/api/managers/employees');
+    return this.http.get<Employee[]>('http://localhost:8080/api/employees');
   }
 }

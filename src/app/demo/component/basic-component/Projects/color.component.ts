@@ -15,7 +15,7 @@ interface Project {
   nom: string;
   startDate: string;
   endDate: string;
-  managerid: string;
+  idmanager: string;
   valider: boolean;
   taches1: Task[];
 }
@@ -35,7 +35,7 @@ export class ColorComponent implements OnInit {
     nom: '',
     startDate: '',
     endDate: '',
-    managerid: '',
+    idmanager: '',
     valider: false,
     taches1: [],
   };
@@ -71,26 +71,37 @@ export class ColorComponent implements OnInit {
           nom: '',
           startDate: '',
           endDate: '',
-          managerid: '',
+          idmanager: '',
           valider: false,
           taches1: [],
         };
     this.showProjectModal = true;
   }
+  
+  
 
   handleProjectSubmit(): void {
+    console.log('Submitting project:', this.currentProject); // Log the payload
+  
     const operation = this.isEditMode
-      ? this.projectService.updateProject(this.currentProject.id, this.currentProject)
-      : this.projectService.createProject(this.currentProject, Number(this.currentProject.managerid));
-
+    ? this.projectService.updateProject(this.currentProject.id, this.currentProject)
+    : this.projectService.createProject(this.currentProject, Number(this.currentProject.idmanager));
+  
     operation.subscribe({
       next: () => {
         this.loadAllProjects();
         this.closeModal();
       },
-      error: (err) => console.error('Error saving project:', err),
+      error: (err) => {
+        console.error('Error saving project:', err);
+        alert('Error saving project: ' + (err.message || 'Unknown error'));
+      },
     });
+    
   }
+  
+  
+  
 
   deleteProject(id: number): void {
     if (confirm('Are you sure you want to delete this project?')) {
@@ -108,7 +119,7 @@ export class ColorComponent implements OnInit {
       nom: '',
       startDate: '',
       endDate: '',
-      managerid: '',
+      idmanager: '',
       valider: false,
       taches1: [],
     };

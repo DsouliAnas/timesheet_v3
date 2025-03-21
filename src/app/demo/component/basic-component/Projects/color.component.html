@@ -2,14 +2,16 @@
   <div class="header">
     <h2>Gestion des Projets</h2>
     <button class="btn btn-primary" (click)="openProjectForm()">
-      <i class="fas fa-plus"></i> Nouveau Projet
+      <i class="fas fa-plus"></i> Nouveau projet
     </button>
   </div>
 
+  <!-- Loading Spinner -->
   <div *ngIf="isLoading" class="loading-spinner">
     <i class="fas fa-spinner fa-spin"></i>
   </div>
 
+  <!-- Project List -->
   <div *ngIf="!isLoading" class="project-list">
     <div class="project-card" *ngFor="let project of projects">
       <div class="card-header">
@@ -26,7 +28,7 @@
 
       <div class="card-body">
         <div class="project-info">
-          <p><strong>Manager ID:</strong> {{ project.managerid }}</p>
+          <p><strong>Manager ID:</strong> {{ project.idmanager }}</p>
           <p><strong>Date de début:</strong> {{ project.startDate | date: 'dd/MM/yyyy' }}</p>
           <p><strong>Date de fin:</strong> {{ project.endDate | date: 'dd/MM/yyyy' }}</p>
           <p><strong>Statut:</strong>
@@ -43,8 +45,7 @@
               <div class="task-info">
                 <span class="task-description">{{ task.description }}</span>
                 <span class="task-dates">
-                  {{ task.debutdateAffaire | date: 'dd/MM/yy' }} -
-                  {{ task.FindateAffaire | date: 'dd/MM/yy' }}
+                  {{ task.debutdateAffaire | date: 'dd/MM/yy' }} - {{ task.FindateAffaire | date: 'dd/MM/yy' }}
                 </span>
               </div>
               <span class="task-status" [class.completed]="task.etat">
@@ -88,7 +89,7 @@
 
         <div class="form-group">
           <label>ID du Manager Responsable</label>
-          <input type="number" [(ngModel)]="currentProject.managerid" name="managerid" required />
+          <input type="number" [(ngModel)]="currentProject.idmanager" name="idmanager" required />
         </div>
 
         <div class="form-actions">

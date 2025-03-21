@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-// Inline definitions for Project and Task types
+
 interface Task {
   description: string;
   debutdateAffaire: string;
@@ -15,7 +15,7 @@ interface Project {
   nom: string;
   startDate: string;
   endDate: string;
-  managerid: string;
+  idmanager: string;
   valider: boolean;
   taches1: Task[];
 }
@@ -64,14 +64,7 @@ export class ProjectService {
     return this.http.get<Task[]>(`${this.apiUrl}/${projectId}/tasks`);
   }
 
-  addTaskWithEmployee(
-    projectId: number,
-    task: Task,
-    employeeId: number
-  ): Observable<Task> {
-    return this.http.post<Task>(
-      `${this.apiUrl}/${projectId}/tasks/assign/${employeeId}`,
-      task
-    );
+  addTaskWithEmployee(projectId: number, task: Task, employeeId: number): Observable<Task> {
+    return this.http.post<Task>(`${this.apiUrl}/${projectId}/tasks/assign/${employeeId}`, task);
   }
 }
