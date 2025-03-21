@@ -50,6 +50,11 @@ const routes: Routes = [
         path: 'profile',
         loadComponent: () => import('./demo/component/basic-component/profile/profile.component').then((c) => c.ProfileComponent)
       },
+      {
+        path: 'projects/:id/tasks',
+        loadComponent: () => import('../app/demo/component/basic-component/tasks/tasks.component').then((c) => c.TasksComponent)
+      }
+      
     ]
   }
 ];

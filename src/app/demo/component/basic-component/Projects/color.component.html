@@ -1,92 +1,101 @@
-<div class="project-page">
-  <!-- Header -->
+<div class="admin-projects">
   <div class="header">
-    <button class="btn btn-primary" (click)="openTaskModal()">
-      <i class="fas fa-plus"></i> Add Task
-      
-    </button>
-    <button class="btn btn-primary" (click)="openTaskModal()">
-      <i class="fas fa-plus"></i> Add project
-      
+    <h2>Gestion des Projets</h2>
+    <button class="btn btn-primary" (click)="openProjectForm()">
+      <i class="fas fa-plus"></i> Nouveau Projet
     </button>
   </div>
 
-  <!-- Project Overview -->
-  <div class="project-overview">
-    <div class="overview-card">
-      <h3>Project Overview</h3>
-      <p>
-        This project involves redesigning the company website to improve user experience and modernize the design.
-      </p>
-      <div class="stats">
-        <div class="stat">
-          <span class="stat-value">12</span>
-          <span class="stat-label">Tasks</span>
-        </div>
-        <div class="stat">
-          <span class="stat-value">8</span>
-          <span class="stat-label">Completed</span>
-        </div>
-        <div class="stat">
-          <span class="stat-value">4</span>
-          <span class="stat-label">In Progress</span>
-        </div>
-      </div>
-    </div>
+  <div *ngIf="isLoading" class="loading-spinner">
+    <i class="fas fa-spinner fa-spin"></i>
   </div>
 
-  <!-- Task List -->
-  <div class="task-list">
-    <h2>Tasks</h2>
-    <div class="task-card" *ngFor="let task of tasks">
-      <div class="task-header">
-        <h3>{{ task.description }}</h3>
-        <span class="task-status" [class.completed]="task.completed">
-          {{ task.completed ? 'Completed' : 'In Progress' }}
-        </span>
-      </div>
-      <div class="task-body">
-        <p><strong>Deadline:</strong> {{ task.deadline }}</p>
-        <p><strong>Assigned To:</strong> {{ task.assignedTo }}</p>
-      </div>
-      <div class="task-actions">
-        <button class="btn btn-edit" (click)="editTask(task)">
-          <i class="fas fa-edit"></i> Edit
-        </button>
-        <button class="btn btn-delete" (click)="deleteTask(task)">
-          <i class="fas fa-trash"></i> Delete
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Add Task Modal -->
-  <div class="modal" *ngIf="showTaskModal">
-    <div class="modal-content">
-      <span class="close" (click)="closeTaskModal()">&times;</span>
-      <h3>Add New Task</h3>
-      <form>
-        <div class="form-group">
-          <label>Task Description</label>
-          <input type="text" placeholder="Enter task description" />
-        </div>
-        <div class="form-group">
-          <label>Deadline</label>
-          <input type="date" />
-        </div>
-        <div class="form-group">
-          <label>Assigned To</label>
-          <select>
-            <option value="John Doe">John Doe</option>
-            <option value="Jane Smith">Jane Smith</option>
-            <option value="Alice Johnson">Alice Johnson</option>
-          </select>
-        </div>
-        <div class="form-actions">
-          <button type="button" class="btn btn-secondary" (click)="closeTaskModal()">
-            Cancel
+  <div *ngIf="!isLoading" class="project-list">
+    <div class="project-card" *ngFor="let project of projects">
+      <div class="card-header">
+        <h3>{{ project.nom }}</h3>
+        <div class="card-actions">
+          <button class="btn btn-icon" (click)="openProjectForm(project)">
+            <i class="fas fa-edit"></i>
           </button>
-          <button type="submit" class="btn btn-primary">Add Task</button>
+          <button class="btn btn-icon danger" (click)="deleteProject(project.id)">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="project-info">
+          <p><strong>Manager ID:</strong> {{ project.managerid }}</p>
+          <p><strong>Date de début:</strong> {{ project.startDate | date: 'dd/MM/yyyy' }}</p>
+          <p><strong>Date de fin:</strong> {{ project.endDate | date: 'dd/MM/yyyy' }}</p>
+          <p><strong>Statut:</strong>
+            <span class="status-badge" [class.validated]="project.valider">
+              {{ project.valider ? 'Validé' : 'En attente' }}
+            </span>
+          </p>
+        </div>
+
+        <div class="tasks-section">
+          <h4>Tâches associées ({{ project.taches1?.length || 0 }})</h4>
+          <div class="task-list">
+            <div *ngFor="let task of project.taches1" class="task-item">
+              <div class="task-info">
+                <span class="task-description">{{ task.description }}</span>
+                <span class="task-dates">
+                  {{ task.debutdateAffaire | date: 'dd/MM/yy' }} -
+                  {{ task.FindateAffaire | date: 'dd/MM/yy' }}
+                </span>
+              </div>
+              <span class="task-status" [class.completed]="task.etat">
+                {{ task.etat ? 'Terminée' : 'En cours' }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-actions">
+          <button class="btn btn-primary" (click)="enterProject(project.id)">
+            <i class="fas fa-sign-in-alt"></i> Entrer dans le projet
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project Form Modal -->
+  <div class="modal" *ngIf="showProjectModal">
+    <div class="modal-content">
+      <span class="close" (click)="closeModal()">&times;</span>
+      <h3>{{ isEditMode ? 'Modifier le Projet' : 'Créer un Nouveau Projet' }}</h3>
+
+      <form (submit)="handleProjectSubmit()">
+        <div class="form-group">
+          <label>Nom du Projet</label>
+          <input type="text" [(ngModel)]="currentProject.nom" name="nom" required />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date de Début</label>
+            <input type="date" [(ngModel)]="currentProject.startDate" name="startDate" required />
+          </div>
+          <div class="form-group">
+            <label>Date de Fin</label>
+            <input type="date" [(ngModel)]="currentProject.endDate" name="endDate" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>ID du Manager Responsable</label>
+          <input type="number" [(ngModel)]="currentProject.managerid" name="managerid" required />
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">Annuler</button>
+          <button type="submit" class="btn btn-primary">
+            {{ isEditMode ? 'Mettre à jour' : 'Créer' }}
+          </button>
         </div>
       </form>
     </div>

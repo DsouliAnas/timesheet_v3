@@ -1,127 +1,123 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';  // Import CommonModule
-import { NzIconModule } from 'ng-zorro-antd/icon';  // Import NzIconModule
-import { BookOutline, ClockCircleOutline } from '@ant-design/icons-angular/icons';  // Import specific icons
-
-// Define the Task interface
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { ProjectService } from 'src/app/ProjectService/project.service';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 interface Task {
   description: string;
-  deadline: string;
-  assignedTo: string;
-  completed: boolean;
+  debutdateAffaire: string;
+  FindateAffaire: string;
+  etat: boolean;
+}
+
+interface Project {
+  id: number;
+  nom: string;
+  startDate: string;
+  endDate: string;
+  managerid: string;
+  valider: boolean;
+  taches1: Task[];
 }
 
 @Component({
   selector: 'app-project-page',
-  standalone: true,  // Declare this component as standalone
-  imports: [CommonModule, NzIconModule],  // Add the necessary imports
-  providers: [
-    {
-      provide: 'NZ_ICONS',
-      useValue: [BookOutline, ClockCircleOutline],
-    },
-  ],
-  templateUrl: './color.component.html',  // Path to your HTML file
-  styleUrls: ['./color.component.scss'],  // Path to your SCSS file
+  standalone: true,
+  imports: [FormsModule,CommonModule], // You can add other modules here like NzIconModule, CommonModule, etc.
+  templateUrl: './color.component.html',
+  styleUrls: ['./color.component.scss'],
 })
-export class ColorComponent {
-  // Static task data
-  tasks: Task[] = [
-    {
-      description: 'Design homepage layout',
-      deadline: '2023-10-15',
-      assignedTo: 'John Doe',
-      completed: false,
-    },
-    {
-      description: 'Develop contact form',
-      deadline: '2023-10-20',
-      assignedTo: 'Jane Smith',
-      completed: true,
-    },
-    {
-      description: 'Optimize website for mobile',
-      deadline: '2023-10-25',
-      assignedTo: 'Alice Johnson',
-      completed: false,
-    },
-  ];
-
-  // Modal state
-  showTaskModal: boolean = false;
-
-  // Task being edited (if any)
-  taskToEdit: Task | null = null;
-
-  // New task form data
-  newTask: Task = {
-    description: '',
-    deadline: '',
-    assignedTo: '',
-    completed: false,
+export class ColorComponent implements OnInit {
+  projects: Project[] = [];
+  showProjectModal = false;
+  currentProject: Project = {
+    id: 0,
+    nom: '',
+    startDate: '',
+    endDate: '',
+    managerid: '',
+    valider: false,
+    taches1: [],
   };
+  isEditMode = false;
+  isLoading = true;
 
-  // Open the task modal
-  openTaskModal(): void {
-    this.showTaskModal = true;
+  constructor(private projectService: ProjectService, private router: Router) {}
+
+  ngOnInit(): void {
+    this.loadAllProjects();
   }
 
-  // Close the task modal
-  closeTaskModal(): void {
-    this.showTaskModal = false;
-    this.taskToEdit = null; // Reset taskToEdit when closing the modal
-    this.resetNewTaskForm(); // Reset the form
+  loadAllProjects(): void {
+    this.isLoading = true;
+    this.projectService.getProjects().subscribe({
+      next: (projects: Project[]) => {
+        this.projects = projects;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error loading projects:', err);
+        this.isLoading = false;
+      },
+    });
   }
 
-  // Reset the new task form
-  resetNewTaskForm(): void {
-    this.newTask = {
-      description: '',
-      deadline: '',
-      assignedTo: '',
-      completed: false,
+  openProjectForm(project?: Project): void {
+    this.isEditMode = !!project;
+    this.currentProject = project
+      ? { ...project }
+      : {
+          id: 0,
+          nom: '',
+          startDate: '',
+          endDate: '',
+          managerid: '',
+          valider: false,
+          taches1: [],
+        };
+    this.showProjectModal = true;
+  }
+
+  handleProjectSubmit(): void {
+    const operation = this.isEditMode
+      ? this.projectService.updateProject(this.currentProject.id, this.currentProject)
+      : this.projectService.createProject(this.currentProject, Number(this.currentProject.managerid));
+
+    operation.subscribe({
+      next: () => {
+        this.loadAllProjects();
+        this.closeModal();
+      },
+      error: (err) => console.error('Error saving project:', err),
+    });
+  }
+
+  deleteProject(id: number): void {
+    if (confirm('Are you sure you want to delete this project?')) {
+      this.projectService.deleteProject(id).subscribe({
+        next: () => this.loadAllProjects(),
+        error: (err) => console.error('Error deleting project:', err),
+      });
+    }
+  }
+
+  closeModal(): void {
+    this.showProjectModal = false;
+    this.currentProject = {
+      id: 0,
+      nom: '',
+      startDate: '',
+      endDate: '',
+      managerid: '',
+      valider: false,
+      taches1: [],
     };
+    this.isEditMode = false;
   }
 
-  // Add a new task
-  addTask(): void {
-    if (this.newTask.description && this.newTask.deadline && this.newTask.assignedTo) {
-      this.tasks.push({ ...this.newTask }); // Add the new task to the list
-      this.closeTaskModal(); // Close the modal
-    }
+  enterProject(projectId: number): void {
+    this.router.navigate([`/projects/${projectId}/tasks`], {
+      queryParams: { projectId: projectId }
+    });
   }
-
-  // Edit a task
-  editTask(task: Task): void {
-    this.taskToEdit = { ...task }; // Set the task to edit
-    this.newTask = { ...task }; // Populate the form with the task data
-    this.showTaskModal = true; // Open the modal
-  }
-
-  // Save the edited task
-  saveEditedTask(): void {
-    if (this.taskToEdit) {
-      const index = this.tasks.findIndex(
-        (t) => t.description === this.taskToEdit?.description
-      );
-      if (index !== -1) {
-        this.tasks[index] = { ...this.newTask }; // Update the task in the list
-      }
-      this.closeTaskModal(); // Close the modal
-    }
-  }
-
-  // Delete a task
-  deleteTask(task: Task): void {
-    this.tasks = this.tasks.filter((t) => t.description !== task.description);
-  }
-
-  // Submit the form (add or edit task)
-  submitTask(): void {
-    if (this.taskToEdit) {
-      this.saveEditedTask(); // Save the edited task
-    } else {
-      this.addTask(); // Add a new task
-    }
-  }
-}
+}  
