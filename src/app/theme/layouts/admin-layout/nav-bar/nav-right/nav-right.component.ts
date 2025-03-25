@@ -58,26 +58,11 @@ export class NavRightComponent {
 
   profile = [
     {
-      icon: 'edit',
-      title: 'Edit Profile',
-      url: '/profile',  // Direct link to the profile path
-      classes: 'nav-item',
-    },
-    {
       icon: 'user',
       title: 'View Profile',
       url: '/profile/view',  // Added URL
     },
-    {
-      icon: 'profile',
-      title: 'Social Profile',
-      url: '/profile/social',  // Added URL
-    },
-    {
-      icon: 'wallet',
-      title: 'Billing',
-      url: '/billing',  // Added URL
-    }
+    
   ];
 
   setting = [
@@ -112,5 +97,15 @@ export class NavRightComponent {
   navigateTo(url: string) {
     this.router.navigate([url]); // Use Router to navigate to the desired URL
   }
+  logout() {
+    localStorage.clear();
+    this.router.navigate(['/login']);
+  }
+  navigateToProfile() {
+
+      this.router.navigate(['/profile']);
+  
+  }
+  
 
 }

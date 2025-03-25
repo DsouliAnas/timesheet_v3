@@ -1,0 +1,164 @@
+// Global Styles for Timesheet Management
+$primary-color: #4CAF50;
+$secondary-color: #F3F4F6;
+$accent-color: #2196F3;
+$header-color: #333;
+$task-bg-color: #fff;
+$task-border-radius: 8px;
+$task-border: 1px solid #ddd;
+
+.timesheet-container {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f4f7f6;
+  padding: 2px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  .timesheet-header {
+    font-size: 24px;
+    font-weight: 600;
+    color: $header-color;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .main-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+  }
+
+  .task-panel {
+    width: 48%;
+    background-color: $task-bg-color;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+
+      mat-icon {
+        font-size: 28px;
+        margin-right: 10px;
+        color: $accent-color;
+      }
+
+      h3 {
+        font-size: 22px;
+        font-weight: 500;
+        color: $header-color;
+      }
+    }
+
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+
+      .task {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        background-color: $task-bg-color;
+        border: $task-border;
+        border-radius: $task-border-radius;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: $secondary-color;
+        }
+
+        .task-badge {
+          font-size: 18px;
+          color: $primary-color;
+        }
+
+        .task-deadline {
+          font-size: 14px;
+          color: #888;
+        }
+      }
+    }
+  }
+
+  .task-details {
+    width: 48%;
+    background-color: $task-bg-color;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(100%);
+    opacity: 0;
+
+    &.show {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    .details-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+
+      h3 {
+        font-size: 22px;
+        font-weight: 500;
+        color: $header-color;
+      }
+
+      .close-btn {
+        font-size: 24px;
+        cursor: pointer;
+        color: #f44336;
+        transition: color 0.3s ease;
+
+        &:hover {
+          color: #e53935;
+        }
+      }
+    }
+
+    .details-content {
+      font-size: 16px;
+      color: #555;
+    }
+  }
+
+  .calendar-container {
+    width: 10000%;
+    background-color: $task-bg-color;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    .calendar-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+
+      mat-icon {
+        font-size: 28px;
+        margin-right: 10px;
+        color: $primary-color;
+      }
+
+      h3 {
+        font-size: 22px;
+        font-weight: 500;
+        color: $header-color;
+      }
+    }
+
+    .fc {
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+  }
+}

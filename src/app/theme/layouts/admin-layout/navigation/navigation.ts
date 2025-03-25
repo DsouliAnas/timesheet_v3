@@ -66,15 +66,7 @@ export const NavigationItems: NavigationItem[] = [
         classes: 'nav-item',
         url: '/User_Management',
         icon: 'user', // User management uses a group icon
-      },
-      {
-        id: 'profile',
-        title: 'Profile',
-        type: 'item',
-        classes: 'nav-item',
-        url: '/profile',
-        icon: 'user', // Approval-related icon
-      },
+      }
       
     ]
   }

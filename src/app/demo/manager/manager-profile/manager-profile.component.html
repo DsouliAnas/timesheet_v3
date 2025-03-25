@@ -1,0 +1,69 @@
+<div class="profile-container">
+    <h2>Profile Page</h2>
+    <div class="profile-details">
+      <div class="avatar">
+        <img [src]="profileImage" alt="User Avatar" />
+        <input
+          type="file"
+          id="profileImageUpload"
+          (change)="onFileChange($event)"
+          accept="image/*"
+          hidden
+        />
+        <label for="profileImageUpload" class="upload-label">edit pic</label>
+      </div>
+      <div class="info">
+        <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input
+              id="name"
+              formControlName="name"
+              placeholder="Enter your name"
+            />
+            <small *ngIf="profileForm.get('name')?.hasError('required') && profileForm.get('name')?.touched">
+              Name is required.
+            </small>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              id="email"
+              formControlName="email"
+              placeholder="Enter your email"
+            />
+            <small *ngIf="profileForm.get('email')?.hasError('required') && profileForm.get('email')?.touched">
+              Email is required.
+            </small>
+            <small *ngIf="profileForm.get('email')?.hasError('email') && profileForm.get('email')?.touched">
+              Please enter a valid email.
+            </small>
+          </div>
+          <div class="form-group">
+            <label for="location">Location</label>
+            <input
+              id="location"
+              formControlName="location"
+              placeholder="Enter your location"
+            />
+          </div>
+          <div class="form-group">
+            <label for="bio">Bio</label>
+            <textarea
+              id="bio"
+              formControlName="bio"
+              placeholder="Tell us about yourself"
+            ></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="submit" [disabled]="profileForm.invalid" class="save-button">
+              Save Changes
+            </button>
+            <button type="button" (click)="onCancel()" class="cancel-button">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

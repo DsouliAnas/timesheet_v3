@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AdminService } from '../../../../AdminService/admin.service';
+import { AdminService } from '../../../AdminService/admin.service';
 
 interface User {
   id: number;

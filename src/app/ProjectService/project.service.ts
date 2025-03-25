@@ -59,6 +59,7 @@ export class ProjectService {
   getProjectsByManager(managerId: number): Observable<Project[]> {
     return this.http.get<Project[]>(`${this.apiUrl}/byManager/${managerId}`);
   }
+  
 
   getTasksByProject(projectId: number): Observable<Task[]> {
     return this.http.get<Task[]>(`${this.apiUrl}/${projectId}/tasks`);

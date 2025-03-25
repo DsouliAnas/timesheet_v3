@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ProjectService } from "../../../../ProjectService/project.service";
+import { ProjectService } from "../../../ProjectService/project.service";
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { TacheService } from '../../../../taskServices/tache.service'; // Ensure correct import
+import { TacheService } from '../../../taskServices/tache.service'; // Ensure correct import
 
 @Component({
   selector: 'app-tasks',

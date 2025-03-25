@@ -1,0 +1,133 @@
+/* Timesheet container that will stay aligned with the sidebar */
+.timesheet-container {
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+  margin: 80px 20px 20px 270px;
+  /* Account for fixed elements */
+
+  /* Ensure the content isn't under the sidebar */
+  margin-left: 250px; /* Offset the sidebar width to the right */
+
+  h2 {
+    text-align: center;
+    color: #333;
+  }
+
+  .view-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+
+  .main-container {
+    display: flex;
+    gap: 20px;
+  }
+
+  /* Task Panel */
+  .task-panel {
+    flex: 1;
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    max-width: 250px;
+
+    h3 {
+      text-align: center;
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      .task {
+        padding: 10px;
+        background: linear-gradient(135deg, #3498db, #2c3e50);
+        color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: transform 0.2s, background 0.3s;
+
+        &:hover {
+          transform: scale(1.05);
+          background: linear-gradient(135deg, #2c3e50, #3498db);
+        }
+      }
+    }
+  }
+
+  /* Task Details (Popup Effect) */
+  .task-details {
+    flex: 2;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+
+    &.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    h3 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 14px;
+      color: #555;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background: #f3f3f3;
+      padding: 5px;
+      border-radius: 3px;
+      margin-bottom: 5px;
+    }
+  }
+
+  /* Calendar */
+  .calendar-container {
+    flex: 4;
+    background: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Add this media query to handle responsive design and make sure it adjusts the layout properly */
+@media (max-width: 992px) {
+  .timesheet-container {
+    padding-left: 0; /* No need for extra padding on mobile */
+    margin-left: 0; /* Remove margin on smaller screens */
+  }
+
+  .main-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .task-panel,
+  .task-details,
+  .calendar-container {
+    max-width: 100%;
+  }
+}

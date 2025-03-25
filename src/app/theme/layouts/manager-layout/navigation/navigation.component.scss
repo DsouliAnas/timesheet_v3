@@ -1,0 +1,35 @@
+.navbar-wrapper {
+    .m-header {
+      padding: 10px 20px; // Add some padding to the header for spacing
+      background-color: #fff; // Set a background color for the navbar (optional)
+  
+      .b-brand {
+        display: flex;
+        align-items: center; // Align logo vertically if needed
+        justify-content: center;
+        
+        .logo {
+          height: 40px; // Set the height for the logo, adjust as needed
+          width: auto; // Maintain aspect ratio
+          max-width: 100%; // Ensure the logo doesn't exceed the container's width
+          transition: transform 0.3s ease; // Optional smooth hover transition
+          
+          &:hover {
+            transform: scale(1.05); // Slightly enlarge the logo on hover (optional)
+          }
+        }
+      }
+    }
+  
+    // Add responsiveness
+    @media (max-width: 768px) {
+      .m-header {
+        .b-brand {
+          .logo {
+            height: 30px; // Reduce the size of the logo on smaller screens
+          }
+        }
+      }
+    }
+  }
+  
