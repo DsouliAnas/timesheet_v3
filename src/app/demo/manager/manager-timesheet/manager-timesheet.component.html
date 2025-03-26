@@ -1,41 +1,41 @@
 <div class="timesheet-container">
-    <h2 class="timesheet-header">Timesheet Management</h2>
+  <h2 class="timesheet-header">Timesheet Management</h2>
 
-  
-    <div class="main-container">
-      <!-- Task List (Draggable) -->
-      <div class="task-panel">
-        <div class="panel-header">
-          <mat-icon>playlist_add_check</mat-icon>
-          <h3>Available Tasks</h3>
-        </div>
-        <div class="task-list" cdkDropList (cdkDropListDropped)="onTaskDrop($event)" [cdkDropListData]="tasks">
-          <div *ngFor="let task of tasks" cdkDrag class="task" [cdkDragData]="task" (click)="showTaskDetails(task)">
-            <div class="task-badge">{{ task.etat ? '✓' : '●' }}</div>
-            {{ task.description }}
-            <div class="task-deadline">{{ task.deadline | date: 'shortDate' }}</div>
-          </div>
-        </div>
+
+  <div class="main-container">
+    <!-- Task List (Draggable) -->
+    <div class="task-panel">
+      <div class="panel-header">
+        <mat-icon>playlist_add_check</mat-icon>
+        <h3>Available Tasks</h3>
       </div>
-  
-      <!-- Task Details Panel -->
-      <div [class]="'task-details' + (selectedTask ? ' show' : '')">
-        <div class="details-header">
-          <h3>Task Details</h3>
-          <mat-icon class="close-btn" (click)="selectedTask = null">close</mat-icon>
+      <div class="task-list" cdkDropList (cdkDropListDropped)="onTaskDrop($event)" [cdkDropListData]="tasks">
+        <div *ngFor="let task of tasks" cdkDrag class="task" [cdkDragData]="task" (click)="showTaskDetails(task)">
+          <div class="task-badge">{{ task.etat ? '✓' : '●' }}</div>
+          {{ task.description }}
+          <div class="task-deadline">{{ task.deadline | date: 'shortDate' }}</div>
         </div>
-        <div class="details-content">
-          <!-- ... (keep existing details content) ... -->
-        </div>
-      </div>
-  
-      <!-- Calendar -->
-      <div class="calendar-container">
-        <div class="calendar-header">
-          <mat-icon>calendar_today</mat-icon>
-          <h3>Schedule Overview</h3>
-        </div>
-        <full-calendar #calendar [options]="calendarOptions"></full-calendar>
       </div>
     </div>
+
+    <!-- Task Details Panel -->
+    <div [class]="'task-details' + (selectedTask ? ' show' : '')">
+      <div class="details-header">
+        <h3>Task Details</h3>
+        <mat-icon class="close-btn" (click)="selectedTask = null">close</mat-icon>
+      </div>
+      <div class="details-content">
+        <!-- ... (keep existing details content) ... -->
+      </div>
+    </div>
+
+    <!-- Calendar -->
+    <div class="calendar-container">
+      <div class="calendar-header">
+        <mat-icon>calendar_today</mat-icon>
+        <h3>Schedule Overview</h3>
+      </div>
+      <full-calendar #calendar [options]="calendarOptions"></full-calendar>
+    </div>
   </div>
+</div>

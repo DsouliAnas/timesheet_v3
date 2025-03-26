@@ -55,8 +55,15 @@ export class AuthService {
 
   getUserRole(): string {
     const role = localStorage.getItem('role') || '';
-    return role.toLowerCase() === 'employe' ? 'employee' : role.toLowerCase();
+  
+    // Normalize "employe" to "employee"
+    if (role.toLowerCase() === 'employe') {
+      return 'employee';
+    }
+  
+    return role.toLowerCase(); // Keep other roles as they are
   }
+  
   
 
   getUserData(): Record<string, unknown> | null {

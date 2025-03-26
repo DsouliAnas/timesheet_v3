@@ -20,18 +20,18 @@ export class AuthLoginComponent {
     this.authService.login(this.email, this.password).subscribe({
       next: () => {
         const role = this.authService.getUserRole(); // Get role from storage
-        console.log('User role:', role);
-
+        console.log('User role:', role, `(Stored as: ${localStorage.getItem('role')})`);
+  
         // Redirect based on role
         switch (role) {
           case 'admin':
             this.router.navigate(['/dashboard/default']);
             break;
           case 'manager':
-            this.router.navigate(['/manager/dashboard']); // Redirect to manager dashboard
+            this.router.navigate(['/manager/dashboard']);
             break;
-          case 'employe':
-            this.router.navigate(['/employee/timesheet']); // Redirect to employee dashboard
+          case 'employee': // Ensure it matches getUserRole output
+            this.router.navigate(['/employee/timesheet']);
             break;
           default:
             console.error('Unknown role:', role);
@@ -43,4 +43,5 @@ export class AuthLoginComponent {
       },
     });
   }
+  
 }

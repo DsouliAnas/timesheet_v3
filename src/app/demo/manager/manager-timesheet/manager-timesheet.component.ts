@@ -16,12 +16,7 @@ import { FullCalendarModule } from '@fullcalendar/angular'; // Import the module
 @Component({
   selector: 'app-manager-timesheet',
   standalone: true, // Mark the component as standalone
-  imports: [
-    MatIconModule,
-    CommonModule,
-    DragDropModule,
-    FullCalendarModule, // Add FullCalendarModule here
-  ],
+  imports: [MatIconModule,CommonModule,DragDropModule,FullCalendarModule,],
   templateUrl: './manager-timesheet.component.html',
   styleUrl: './manager-timesheet.component.scss'
 })
@@ -32,7 +27,7 @@ export class ManagerTimesheetComponent implements OnInit {
   selectedTask: any = null;
 
   constructor(
-    private http: HttpClient,
+    private readonly http: HttpClient,
     private dialog: MatDialog,
     private tacheService: TacheService
   ) {}
