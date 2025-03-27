@@ -6,9 +6,10 @@ import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-auth-login',
+  standalone: true,
   imports: [FormsModule, HttpClientModule],
   templateUrl: './auth-login.component.html',
-  styleUrl: './auth-login.component.scss',
+  styleUrls: ['./auth-login.component.scss'], // Correction ici (styleUrls)
 })
 export class AuthLoginComponent {
   email: string = '';
@@ -17,31 +18,36 @@ export class AuthLoginComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   login(): void {
+    if (!this.email || !this.password) {
+      alert('Veuillez remplir tous les champs.');
+      return;
+    }
+
     this.authService.login(this.email, this.password).subscribe({
       next: () => {
-        const role = this.authService.getUserRole(); // Get role from storage
+        const role = this.authService.getUserRole();
         console.log('User role:', role, `(Stored as: ${localStorage.getItem('role')})`);
-  
-        // Redirect based on role
-        switch (role) {
-          case 'admin':
-            this.router.navigate(['/dashboard/default']);
-            break;
-          case 'manager':
-            this.router.navigate(['/manager/dashboard']);
-            break;
-          case 'employee': // Ensure it matches getUserRole output
-            this.router.navigate(['/employee/timesheet']);
-            break;
-          default:
-            console.error('Unknown role:', role);
-        }
+
+        this.redirectUser(role);
       },
       error: (error) => {
-        alert('Invalid email or password');
-        console.error('Login failed:', error);
+        alert('Email ou mot de passe incorrect.');
+        console.error('Échec de la connexion :', error);
       },
     });
   }
-  
+
+  private redirectUser(role: string): void {
+    const routes: Record<string, string> = {
+      admin: '/dashboard/default',
+      manager: '/manager/dashboard',
+      employee: '/employee/timesheet',
+    };
+
+    if (routes[role]) {
+      this.router.navigate([routes[role]]);
+    } else {
+      console.error('Rôle inconnu:', role);
+    }
+  }
 }

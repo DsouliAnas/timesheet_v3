@@ -19,9 +19,7 @@ export class AdminService {
     return this.http.post(`${this.apiUrl}/employees`, employee);
   }
 
-  deleteEmployee(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/employees/${id}`);
-  }
+
 
   // Gestion des managers
   getManagers(): Observable<any> {
@@ -32,9 +30,7 @@ export class AdminService {
     return this.http.post(`${this.apiUrl}/createManager`, manager);
   }
 
-  deleteManager(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/deleteManager/${id}`);
-  }
+
 
   // Gestion des admins
   createAdmin(admin: any): Observable<any> {

@@ -1,92 +1,147 @@
-// Variables
-$primary-color: #3498db;
-$success-color: #2ecc71;
-$danger-color: #e74c3c;
-$background-color: #f4f4f4;
-$text-color: #333;
+// Define color variables for a more modern and professional look
+$primary-color: #1a73e8; // Blue for general actions
+$success-color: #4caf50; // Green for approve button
+$error-color: #f44336; // Red for reject button
+$background-color: #f8f9fa; // Light background
+$text-color: #343a40; // Dark text for contrast
+$border-color: #dcdfe1; // Light border color
+$hover-bg: #e9ecef; // Hover background for rows
+$shadow: 0 4px 12px rgba(0, 0, 0, 0.1); // Box shadow for depth
+$radius: 8px; // Border radius for smooth edges
+$padding: 20px; // Padding for the container
 
-// General Styles
-.timesheet-approval-page {
-  padding: 20px;
-}
+.timesheet-approvals {
+  padding: $padding;
+  background-color: $background-color;
+  border-radius: $radius;
+  box-shadow: $shadow;
+  max-width: 100%;
+  overflow: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
-// Header
-.header {
-  margin-bottom: 20px;
-
-  h1 {
-    font-size: 24px;
-    color: $primary-color;
+  h2 {
+    font-size: 2rem;
+    color: $text-color;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    text-transform: capitalize;
   }
-}
-
-// Timesheet Table
-.timesheet-table {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
   table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 1rem;
 
-    th,
-    td {
-      padding: 12px;
+    th, td {
+      padding: 1.25rem;
       text-align: left;
-      border-bottom: 1px solid #ddd;
+      border-bottom: 1px solid $border-color;
     }
 
     th {
-      background-color: $primary-color;
+      background-color: #f1f3f5;
+      color: #495057;
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    tr:hover {
+      background-color: $hover-bg;
+      transition: background-color 0.3s ease;
+    }
+
+    .pending {
+      color: #f39c12;
+      font-weight: 500;
+    }
+
+    .approved {
+      color: #2ecc71;
+      font-weight: 500;
+    }
+
+    .rejected {
+      color: #e74c3c;
+      font-weight: 500;
+    }
+  }
+
+  button {
+    padding: 0.75rem 1.25rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-right: 1rem;
+    border: none;
+    text-transform: uppercase;
+    width: auto;
+    display: inline-block;
+
+    &.approve {
+      background-color: $success-color;
       color: white;
-    }
 
-    .status {
-      padding: 5px 10px;
-      border-radius: 5px;
-      font-size: 14px;
-
-      &.approved {
-        background-color: $success-color;
-        color: white;
-      }
-
-      &.rejected {
-        background-color: $danger-color;
-        color: white;
-      }
-
-      &.pending {
-        background-color: #f1c40f;
-        color: white;
+      &:hover {
+        background-color: darken($success-color, 10%);
       }
     }
 
-    .btn {
-      padding: 5px 10px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 14px;
+    &.reject {
+      background-color: $error-color;
+      color: white;
 
-      &.btn-approve {
-        background-color: $success-color;
-        color: white;
+      &:hover {
+        background-color: darken($error-color, 10%);
+      }
+    }
 
-        &:hover {
-          background-color: darken($success-color, 10%);
-        }
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 768px) {
+    h2 {
+      font-size: 1.5rem;
+    }
+
+    table {
+      font-size: 0.9rem;
+      th, td {
+        padding: 0.9rem;
       }
 
-      &.btn-reject {
-        background-color: $danger-color;
-        color: white;
+      button {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+      }
+    }
+  }
 
-        &:hover {
-          background-color: darken($danger-color, 10%);
-        }
+  @media (max-width: 480px) {
+    padding: 15px;
+
+    h2 {
+      font-size: 1.25rem;
+    }
+
+    table {
+      font-size: 0.8rem;
+
+      th, td {
+        padding: 0.75rem;
+      }
+
+      button {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.75rem;
       }
     }
   }

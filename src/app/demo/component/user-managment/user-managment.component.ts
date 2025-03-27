@@ -1,121 +1,180 @@
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
+import { finalize } from 'rxjs/operators';
 import { AdminService } from '../../../AdminService/admin.service';
+import { FormsModule } from '@angular/forms';  // Import FormsModule here
+import { CommonModule } from '@angular/common';  // Import CommonModule
 
+// Define User interface for type safety
 interface User {
-  id: number;
-  name: string;
+  id?: number;
+  prenom: string;
+  nom: string;
   email: string;
-  role: string;
+  password?: string;
+  role: 'employee' | 'manager' | 'admin';
+  departement: string;
 }
 
 @Component({
   selector: 'app-user-managment',
+  standalone: true,
   templateUrl: './user-managment.component.html',
-  imports: [FormsModule, CommonModule],
   styleUrls: ['./user-managment.component.scss'],
+  imports: [FormsModule, CommonModule],  // Ensure both FormsModule and CommonModule are imported
 })
 export class UserManagmentComponent implements OnInit {
-  users: User[] = [];
-  showUserModal: boolean = false;
-  userToEdit: User | null = null;
-  newUser: User = { id: 0, name: '', email: '', role: 'Employee' };
+  users: User[] = []; // Type users as User[]
+  showModal = false;
+  isEditMode = false;
+  currentUserId: number | null = null;
+  isLoading = false;
+  errorMessage: string | null = null;
+
+  newUser: User = {  // Type newUser as User
+    prenom: '',
+    nom: '',
+    email: '',
+    password: '',
+    role: 'employee',
+    departement: '',
+  };
 
   constructor(private adminService: AdminService) {}
 
   ngOnInit(): void {
-    this.loadUsers();  // Load users from the backend
+    this.loadUsers();
   }
 
-  // Load users from the backend
   loadUsers(): void {
-    this.adminService.getEmployees().subscribe(
-      (data) => {
-        this.users = data;  // Assuming the data returned is in the correct format
+    this.isLoading = true;
+    this.errorMessage = null;
+
+    this.adminService.getEmployees().pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe({
+      next: (employees: User[]) => {  // Type employees as User[]
+        const employeeUsers = employees.map(e => ({ ...e, role: 'employee' as User['role'] }));
+        
+        this.adminService.getManagers().subscribe((managers: User[]) => {  // Type managers as User[]
+          const managerUsers = managers.map(m => ({ ...m, role: 'manager' as User['role'] }));
+          this.users = [...employeeUsers, ...managerUsers];
+        });
       },
-      (error: HttpErrorResponse) => {
-        console.error('Error fetching users', error);
+      error: (err) => {
+        this.errorMessage = 'Erreur lors du chargement des utilisateurs';
+        console.error(err);
       }
-    );
+    });
   }
 
-  // Open the user modal
-  openUserModal(): void {
-    this.showUserModal = true;
+  createUser(): void {
+    this.showModal = true;
+    this.isEditMode = false;
+    this.newUser = {
+      prenom: '',
+      nom: '',
+      email: '',
+      password: '',
+      role: 'employee',
+      departement: '',
+    };
   }
 
-  // Close the user modal
-  closeUserModal(): void {
-    this.showUserModal = false;
-    this.userToEdit = null;
-    this.resetNewUserForm();
+  editUser(user: User): void {  // Type user as User
+    this.isEditMode = true;
+    this.currentUserId = user.id;
+    this.newUser = {
+      prenom: user.prenom,
+      nom: user.nom,
+      email: user.email,
+      password: '', // Password intentionally left blank
+      role: user.role,
+      departement: user.departement,
+    };
+    this.showModal = true;
   }
 
-  // Reset the new user form
-  resetNewUserForm(): void {
-    this.newUser = { id: 0, name: '', email: '', role: 'Employee' };
-  }
+  submitForm(): void {
+    if (!this.validateForm()) return;
 
-  // Add a new user (send to backend)
-  addUser(): void {
-    if (this.newUser.name && this.newUser.email && this.newUser.role) {
-      this.adminService.createEmployee(this.newUser).subscribe(
-        (data) => {
-          this.users.push(data);  // Add the new user to the list
-          this.closeUserModal();
-        },
-        (error: HttpErrorResponse) => {
-          console.error('Error adding user', error);
-        }
-      );
-    }
-  }
+    const userData: User = {
+      ...this.newUser,
+      ...(this.isEditMode && { id: this.currentUserId }),
+    };
 
-  // Edit a user
-  editUser(user: User): void {
-    this.userToEdit = { ...user };
-    this.newUser = { ...user };  // Populate the form with the user's data
-    this.showUserModal = true;
-  }
+    let request;
 
-  // Save the edited user
-  saveEditedUser(): void {
-    if (this.userToEdit) {
-      this.adminService.updateEmployee(this.newUser).subscribe(
-        (updatedUser) => {
-          const index = this.users.findIndex((u) => u.id === this.userToEdit?.id);
-          if (index !== -1) {
-            this.users[index] = updatedUser;  // Update the user in the list
-          }
-          this.closeUserModal();
-        },
-        (error: HttpErrorResponse) => {
-          console.error('Error updating user', error);
-        }
-      );
-    }
-  }
-
-  // Delete a user (send to backend)
-  deleteUser(user: User): void {
-    this.adminService.deleteEmployee(user.id).subscribe(
-      () => {
-        this.users = this.users.filter((u) => u.id !== user.id);
-      },
-      (error: HttpErrorResponse) => {
-        console.error('Error deleting user', error);
-      }
-    );
-  }
-
-  // Submit the form (add or edit user)
-  submitUserForm(): void {
-    if (this.userToEdit) {
-      this.saveEditedUser();  // Save the edited user
+    if (this.isEditMode) {
+      request = this.updateUser(userData);
     } else {
-      this.addUser();  // Add a new user
+      request = this.createNewUser(userData);
     }
+
+    request.subscribe({
+      next: () => {
+        this.loadUsers();
+        this.closeModal();
+      },
+      error: (err) => {
+        this.errorMessage = 'Erreur lors de la sauvegarde';
+        console.error(err);
+      },
+    });
+  }
+
+  private createNewUser(userData: User) {  // Type userData as User
+    switch (userData.role) {
+      case 'manager':
+        return this.adminService.createManager(userData);
+      case 'admin':
+        return this.adminService.createAdmin(userData);
+      default:
+        return this.adminService.createEmployee(userData);
+    }
+  }
+
+  private updateUser(userData: User) {  // Type userData as User
+    switch (userData.role) {
+      case 'manager':
+        return this.adminService.updateManager(userData);
+      case 'admin':
+        // Implement updateAdmin if necessary
+        throw new Error('Mise à jour admin non implémentée');
+      default:
+        return this.adminService.updateEmployee(userData);
+    }
+  }
+
+ 
+
+  closeModal(): void {
+    this.showModal = false;
+    this.isEditMode = false;
+    this.currentUserId = null;
+    this.newUser = {
+      prenom: '',
+      nom: '',
+      email: '',
+      password: '',
+      role: 'employee',
+      departement: '',
+    };
+  }
+
+  private validateForm(): boolean {
+    const requiredFields = ['prenom', 'nom', 'email', 'role', 'departement'];
+    const isValid = requiredFields.every(field => !!this.newUser[field]);
+
+    if (!isValid) {
+      this.errorMessage = 'Tous les champs obligatoires doivent être remplis';
+      return false;
+    }
+
+    if (!this.isEditMode && !this.newUser.password) {
+      this.errorMessage = 'Le mot de passe est requis';
+      return false;
+    }
+
+    return true;
   }
 }

@@ -1,39 +1,32 @@
-<div class="timesheet-approval-page">
-  
-    <!-- Timesheet Table -->
-    <div class="timesheet-table">
-      <table>
-        <thead>
-          <tr>
-            <th>Employee</th>
-            <th>Week Ending</th>
-            <th>Hours Worked</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let timesheet of timesheets">
-            <td>{{ timesheet.employee }}</td>
-            <td>{{ timesheet.weekEnding }}</td>
-            <td>{{ timesheet.hoursWorked }}</td>
-            <td>
-              <span class="status" [class.approved]="timesheet.status === 'Approved'"
-                [class.rejected]="timesheet.status === 'Rejected'"
-                [class.pending]="timesheet.status === 'Pending'">
-                {{ timesheet.status }}
-              </span>
-            </td>
-            <td>
-              <button class="btn btn-approve" (click)="approveTimesheet(timesheet)" *ngIf="timesheet.status === 'Pending'">
-                Approve
-              </button>
-              <button class="btn btn-reject" (click)="rejectTimesheet(timesheet)" *ngIf="timesheet.status === 'Pending'">
-                Reject
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+<div class="timesheet-approvals">
+  <h2>Timesheet Approvals</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Employee</th>
+        <th>Hours Worked</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let timesheet of timesheets">
+        <td>{{ timesheet.employee }}</td>
+        <td>{{ timesheet.hours }}</td>
+        <td>
+          <span [class.pending]="timesheet.status === 'pending'"
+                [class.approved]="timesheet.status === 'approved'"
+                [class.rejected]="timesheet.status === 'rejected'">{{ timesheet.status }}</span>
+        </td>
+        <td>
+          <button (click)="approveTimesheet(timesheet.id)"
+                  *ngIf="timesheet.status === 'pending'"
+                  class="approve">Approve</button>
+          <button (click)="rejectTimesheet(timesheet.id)"
+                  *ngIf="timesheet.status === 'pending'"
+                  class="reject">Reject</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

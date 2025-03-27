@@ -1,56 +1,35 @@
 // Angular import
-import { Component } from '@angular/core';
-import { CardComponent } from 'src/app/theme/shared/components/card/card.component';
+import { Component, OnInit } from '@angular/core';
 
-interface Timesheet {
-  employee: string;
-  weekEnding: string;
-  hoursWorked: number;
-  status: 'Approved' | 'Rejected' | 'Pending';
-}
+
 @Component({
   selector: 'app-typography',
-  imports: [CardComponent],
   templateUrl: './typography.component.html',
   styleUrl: './typography.component.scss'
 })
-export class TypographyComponent {
-
-  timesheets: Timesheet[] = [
-    {
-      employee: 'John Doe',
-      weekEnding: '2023-10-07',
-      hoursWorked: 40,
-      status: 'Pending',
-    },
-    {
-      employee: 'Jane Smith',
-      weekEnding: '2023-10-07',
-      hoursWorked: 35,
-      status: 'Pending',
-    },
-    {
-      employee: 'Alice Johnson',
-      weekEnding: '2023-10-07',
-      hoursWorked: 45,
-      status: 'Approved',
-    },
-    {
-      employee: 'Bob Brown',
-      weekEnding: '2023-10-07',
-      hoursWorked: 38,
-      status: 'Rejected',
-    },
+export class TypographyComponent implements OnInit {
+  timesheets = [
+    { id: 1, employee: 'john_doe', hours: 40, status: 'pending' },
+    { id: 2, employee: 'jane_smith', hours: 35, status: 'approved' },
+    // More timesheet data
   ];
 
-  // Approve a timesheet
-  approveTimesheet(timesheet: Timesheet): void {
-    timesheet.status = 'Approved';
+  constructor() { }
+
+  ngOnInit(): void {
+    // Initialization logic can be added here if needed
+    console.log('TypographyComponent initialized');
   }
 
-  // Reject a timesheet
-  rejectTimesheet(timesheet: Timesheet): void {
-    timesheet.status = 'Rejected';
+  approveTimesheet(timesheetId: number): void {
+    // Logic to approve timesheet
+    this.timesheets = this.timesheets.map(timesheet => 
+      timesheet.id === timesheetId ? { ...timesheet, status: 'approved' } : timesheet
+    );
   }
 
+  rejectTimesheet(timesheetId: number): void {
+    // Logic to reject timesheet
+    this.timesheets = this.timesheets.filter(timesheet => timesheet.id !== timesheetId);
+  }
 }
