@@ -32,8 +32,8 @@ export const NavigationItems: NavigationItem[] = [
         title: 'Timesheet',
         type: 'item',
         classes: 'nav-item',
-        url: '/employee/timesheet', // ✅ Corrected URL
-        icon: 'event_note', // ✅ Updated to a relevant Material icon
+        url: '/employee/timesheet', 
+        icon: 'event_note',
       }
       
     ]
