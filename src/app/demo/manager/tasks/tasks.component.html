@@ -1,0 +1,82 @@
+<p>tasks works!</p>
+<div class="tache-container">
+    <div class="header">
+      <h2 *ngIf="projectDetails">Tâches du projet: {{ projectDetails.nom }}</h2>
+      <h2 *ngIf="!projectDetails">Tâches du projet</h2>
+      <div class="header-actions">
+        <button class="btn btn-primary" (click)="openTaskModal()">
+          <i class="fas fa-plus"></i> Add task
+        </button>
+        <!-- Navigate to the manager projects list -->
+        <button class="btn btn-secondary" [routerLink]="['/manager/projects']">
+          <i class="fas fa-arrow-left"></i> Back to projects
+        </button>
+        
+      </div>
+      
+  
+    <div *ngIf="isLoading" class="loading-spinner">
+      <i class="fas fa-spinner fa-spin"></i>
+    </div>
+  
+    <div *ngIf="!isLoading && tasks.length === 0" class="no-tasks">
+      <p>Aucune tâche n'est associée à ce projet.</p>
+    </div>
+  
+    <div *ngIf="!isLoading && tasks.length > 0" class="tasks-list">
+      <div class="task-card" *ngFor="let task of tasks">
+        <div class="task-header">
+          <h3>{{ task.description }}</h3>
+          <span class="task-status" [class.completed]="task.etat">
+            {{ task.etat ? 'Terminée' : 'En cours' }}
+          </span>
+        </div>
+        
+        <div class="task-body">
+          <div class="task-dates">
+            <p><strong>Date de début:</strong> {{ task.debutdateAffaire | date: 'dd/MM/yyyy' }}</p>
+            <p><strong>Date de fin:</strong> {{ task.FindateAffaire | date: 'dd/MM/yyyy' }}</p>
+            <p><strong>Deadline:</strong> {{ task.deadline | date: 'dd/MM/yyyy' }}</p>
+          </div>
+          
+          <div class="task-employees" *ngIf="task.employes && task.employes.length > 0">
+            <h4>Employés assignés:</h4>
+            <ul>
+              <li *ngFor="let employe of task.employes">
+                {{ employe.nom }} {{ employe.prenom }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Task Creation Modal -->
+    <div *ngIf="showTaskModal" class="task-modal">
+        <div class="modal-content">
+          <form (ngSubmit)="submitTask()">
+            <label for="description">Description</label>
+            <input type="text" [(ngModel)]="newTask.description" name="description" required>
+      
+            <label for="debutdateAffaire">Début de l'affaire</label>
+            <input type="date" [(ngModel)]="newTask.debutdateAffaire" name="debutdateAffaire" required>
+      
+            <label for="FindateAffaire">Fin de l'affaire</label>
+            <input type="date" [(ngModel)]="newTask.FindateAffaire" name="FindateAffaire" required>
+      
+            <label for="deadline">Date limite</label>
+            <input type="date" [(ngModel)]="newTask.deadline" name="deadline" required>
+      
+            <label for="employee">Assign to Employee</label>
+            <select [(ngModel)]="selectedEmployeeId" name="employee" required>
+              <option *ngFor="let employee of employees" [value]="employee.id">
+                {{ employee.nom }} {{ employee.prenom }}
+              </option>
+            </select>
+      
+            <button type="submit" class="btn btn-primary">Add Task</button>
+            <button type="button" class="btn btn-secondary" (click)="closeTaskModal()">Cancel</button>
+          </form>
+        </div>
+      </div>
+    </div>

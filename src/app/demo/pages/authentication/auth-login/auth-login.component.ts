@@ -41,7 +41,7 @@ export class AuthLoginComponent {
     const routes: Record<string, string> = {
       admin: '/dashboard/default',
       manager: '/manager/dashboard',
-      employee: '/employee/timesheet',
+      employe: '/employee/timesheet',
     };
 
     if (routes[role]) {

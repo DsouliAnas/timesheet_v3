@@ -18,8 +18,9 @@ export class AdminService {
   createEmployee(employee: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/employees`, employee);
   }
-
-
+  getUserProfile(): Observable<{ name: string, role: string }> {
+    return this.http.get<{ name: string, role: string }>(`${this.apiUrl}/user/profile`);
+  }
 
   // Gestion des managers
   getManagers(): Observable<any> {

@@ -1,1 +1,14 @@
-<h1>project work</h1>
+<div>
+    <h3>My Projects</h3>
+    <ul>
+      <li *ngFor="let project of projects">
+        <strong>{{ project.nom }}</strong>
+        <p>Start Date: {{ project.startDate }} | End Date: {{ project.endDate }}</p>
+        <p>Status: {{ project.valider ? 'Validated' : 'Pending' }}</p>
+  
+        <!-- Button to navigate to the project tasks page -->
+        <button (click)="goToTasks(project.id)">View Tasks</button>
+      </li>
+    </ul>
+  </div>
+  

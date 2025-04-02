@@ -1,5 +1,4 @@
 <div class="timesheet-approvals">
-  <h2>Timesheet Approvals</h2>
   <table>
     <thead>
       <tr>
@@ -14,17 +13,25 @@
         <td>{{ timesheet.employee }}</td>
         <td>{{ timesheet.hours }}</td>
         <td>
-          <span [class.pending]="timesheet.status === 'pending'"
-                [class.approved]="timesheet.status === 'approved'"
-                [class.rejected]="timesheet.status === 'rejected'">{{ timesheet.status }}</span>
+          <span [ngClass]="{
+                  'pending': timesheet.status === 'pending',
+                  'approved': timesheet.status === 'approved',
+                  'rejected': timesheet.status === 'rejected'
+                }">
+            {{ timesheet.status }}
+          </span>
         </td>
         <td>
-          <button (click)="approveTimesheet(timesheet.id)"
-                  *ngIf="timesheet.status === 'pending'"
-                  class="approve">Approve</button>
-          <button (click)="rejectTimesheet(timesheet.id)"
-                  *ngIf="timesheet.status === 'pending'"
-                  class="reject">Reject</button>
+          <button *ngIf="timesheet.status === 'pending'"
+                  (click)="approveTimesheet(timesheet.id)"
+                  class="approve">
+            Approve
+          </button>
+          <button *ngIf="timesheet.status === 'pending'"
+                  (click)="rejectTimesheet(timesheet.id)"
+                  class="reject">
+            Reject
+          </button>
         </td>
       </tr>
     </tbody>

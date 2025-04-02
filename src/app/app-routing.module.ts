@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { RoleGuard } from './auth/guards/role.guard';  // Import your Role Guard
 
 import { AdminComponent } from './theme/layouts/admin-layout/admin-layout.component';
 import { GuestLayoutComponent } from './theme/layouts/guest-layout/guest-layout.component';
 import { ManagerLayoutComponent } from './theme/layouts/manager-layout/manager-layout.component'; // Import Manager Layout
 import { EmployeeLayoutComponent } from '../app/theme/layouts/Employee_layout/employee-layout.component'; // Import Employee Layout
+import { TasksComponent } from './demo/component/tasks/tasks.component';
 
 const routes: Routes = [
   {
@@ -35,7 +35,9 @@ const routes: Routes = [
       { path: 'notifications', loadComponent: () => import('./demo/component/notifications/sample-page.component').then((c) => c.SamplePageComponent) },
       { path: 'User_Management', loadComponent: () => import('./demo/component/user-managment/user-managment.component').then((c) => c.UserManagmentComponent) },
       { path: 'profile', loadComponent: () => import('./demo/component/profile/profile.component').then((c) => c.ProfileComponent) },
-      { path: 'projects/:id/tasks', loadComponent: () => import('./demo/component/tasks/tasks.component').then((c) => c.TasksComponent) }
+      { path: 'projects/:id/tasks', loadComponent: () => import('./demo/component/tasks/tasks.component').then((c) => c.TasksComponent) },
+      { path: 'settings', loadComponent: () => import('./demo/component/settings/settings.component').then((c) => c.SettingsComponent) }
+
     ]
   },
   // Manager Routes
@@ -47,9 +49,10 @@ const routes: Routes = [
       { path: 'profile', loadComponent: () => import('./demo/manager/manager-profile/manager-profile.component').then((c) => c.ManagerProfileComponent) },
       { path: 'timesheet', loadComponent: () => import('./demo/manager/manager-timesheet/manager-timesheet.component').then((c) => c.ManagerTimesheetComponent) },
       { path: 'projects', loadComponent: () => import('./demo/manager/manager-projects/manager-projects.component').then((c) => c.ManagerProjectsComponent) },
-
+      { path: 'projects/:projectId/tasks', component: TasksComponent },
     ]
-  },
+  }
+  ,
   {
     path: 'employee',
     component: EmployeeLayoutComponent,  

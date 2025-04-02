@@ -1,59 +1,87 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../../../auth/auth.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+
+interface UserProfile {
+  prenom: string;
+  name: string;
+  email: string;
+  location?: string;
+  department?: string;
+  role?: string;
+  profileImage?: string;
+  bio?: string;
+  lastPasswordChange?: Date | string;
+}
 
 @Component({
   selector: 'app-profile',
+  imports : [ReactiveFormsModule,CommonModule],
   templateUrl: './profile.component.html',
-  imports: [ReactiveFormsModule],
-  styleUrls: ['./profile.component.scss'],
+  styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  profileForm!: FormGroup;
-  profileImage: string = 'https://via.placeholder.com/150'; // Default profile image
+  profileForm: FormGroup;
+  profileImage: string = 'assets/images/default-avatar.jpg';
+  editMode: boolean = false;
+  lastPasswordChange: Date = new Date();
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private authService: AuthService) {
+    this.profileForm = this.fb.group({
+      prenom: ['', Validators.required],
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      location: [''],
+      department: [''],
+      role: [''],
+      bio: ['']
+    });
+  }
 
   ngOnInit(): void {
-    this.profileForm = this.fb.group({
-      name: ['John Doe', Validators.required],
-      email: ['john.doe@gmail.com', [Validators.required, Validators.email]],
-      location: ['New York, USA'],
-      bio: ['Software Developer | Angular Enthusiast'],
-    });
+    this.loadUserProfile();
   }
 
-  // Handle profile image upload
+  loadUserProfile(): void {
+    const userData = this.authService.getUserData() as UserProfile;
+    if (userData) {
+      this.profileForm.patchValue(userData);
+      this.profileImage = userData.profileImage || this.profileImage;
+      this.lastPasswordChange = userData.lastPasswordChange ? new Date(userData.lastPasswordChange) : new Date();
+    }
+  }
+
+  toggleEditMode(): void {
+    this.editMode = !this.editMode;
+  }
+  openPasswordModal(): void {
+    // Logic to open the password modal
+    console.log('Password modal opened');
+  }
+
   onFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const file = input.files ? input.files[0] : null;
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e: ProgressEvent<FileReader>) => {
-        this.profileImage = e.target.result as string;
-      };
-      reader.readAsDataURL(file);
+    if (input.files && input.files.length > 0) {
+      const file: File = input.files[0];
+      this.profileImage = URL.createObjectURL(file);
     }
   }
+  
 
-  // Handle form submission
   onSubmit(): void {
     if (this.profileForm.valid) {
-      console.log('Profile Updated:', this.profileForm.value);
-      alert('Profile updated successfully!');
-    } else {
-      alert('Please fill out the form correctly.');
+      console.log('Form submitted:', this.profileForm.value);
     }
   }
 
-  // Handle cancel button click
   onCancel(): void {
-    this.profileForm.reset({
-      name: 'John Doe',
-      email: 'john.doe@gmail.com',
-      location: 'New York, USA',
-      bio: 'Software Developer | Angular Enthusiast',
-    });
-    this.profileImage = 'https://via.placeholder.com/150';
+    this.editMode = false;
+  }
+
+  showError(field: string): boolean {
+    const fieldControl = this.profileForm.get(field);
+    return fieldControl ? fieldControl.invalid && fieldControl.touched : false;
   }
 }
